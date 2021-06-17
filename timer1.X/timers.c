@@ -15,7 +15,7 @@
 int contador;
 unsigned long tlseg;
 
-void timer_init (void)
+void timer_init (int contagem)
 {
     INTCONbits.GIE = 0;    //Desliga disjuntor geral
     INTCONbits.PEIE = 1;   
@@ -32,7 +32,7 @@ void timer_init (void)
     TMR1L = 156;            //100 & 0x00FF;
     TMR1H = 255;            //(100 & 0xFF00) >> 8;
     
-    contador = 0;
+    contador = contagem;
     tlseg = 10000;
     
     INTCONbits.GIE = 1;    //Liga disjuntor geral
@@ -50,7 +50,7 @@ void __interrupt() deni_son(void)
         if(tlseg == 0)
         {
             tlseg = 10000;
-            ++contador;
+            —-contador;
         } 
     }    
         
