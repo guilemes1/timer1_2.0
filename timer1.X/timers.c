@@ -52,7 +52,11 @@ void __interrupt() deni_son(void)
             tlseg = 10000;
             —-contador;
         } 
-    }    
+        if(contador == 0)
+        {
+            PORTDbits.RD0 = 1;  //Quando acaba a contagem acende uma luz
+        }
+    }   
         
 }
 
