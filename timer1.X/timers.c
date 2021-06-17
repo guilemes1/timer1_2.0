@@ -4,9 +4,9 @@
  *
  * Created on 11 de Junho de 2021, 16:03
  * 
- * ciclo de máquina: 1us
+ * ciclo de mÃ¡quina: 1us
  * 
- * estouro: TMR1 * preescaler * ciclo de máquina
+ * estouro: TMR1 * preescaler * ciclo de mÃ¡quina
  */
 
 #include "delay.h"
@@ -29,8 +29,8 @@ void timer_init (void)
     T1CONbits.T1CKPS0 = 0;  //Preescaler
     T1CONbits.T1CKPS1 = 0;  //Preescaler
     
-    TMR1L = 100 & 0x00FF;
-    TMR1H =(100 & 0xFF00) >> 8;
+    TMR1L = 156;            //100 & 0x00FF;
+    TMR1H = 255;            //(100 & 0xFF00) >> 8;
     
     contador = 0;
     tlseg = 10000;
@@ -44,8 +44,8 @@ void __interrupt() deni_son(void)
     {
         PIR1bits.TMR1IF = 0;    //LIMPA A FLAG VIA SOFTWARE
         
-        TMR1L =  100 & 0x00FF;
-        TMR1H = (100 & 0xFF00) >> 8;
+        TMR1L = 156;            //100 & 0x00FF;
+        TMR1H = 255;            //(100 & 0xFF00) >> 8;
         --tlseg;
         if(tlseg == 0)
         {
