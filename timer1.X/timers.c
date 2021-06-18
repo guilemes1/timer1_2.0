@@ -9,6 +9,7 @@
  * estouro: TMR1 * preescaler * ciclo de máquina
  */
 
+#include “botoes.h”
 #include "delay.h"
 #include <xc.h>
 
