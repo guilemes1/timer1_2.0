@@ -17,15 +17,18 @@ unsigned long tlseg;
 
 void timer_init (int contagem)
 {
+    TRISDbits.RD0 = 0;
+    PORTDbits.RD0 = 0;     //Inicializa LED de sinalização
+
     INTCONbits.GIE = 0;    //Desliga disjuntor geral
     INTCONbits.PEIE = 1;   
-    PIE1bits.TMR1IE = 1;   //ENEBLE T1
+    PIE1bits.TMR1IE = 1;   //ENEBLE da interrupção do TMR1
     
     // REGISTRADOR DE BLOCOS DO DIAGRAMA
     T1CONbits.TMR1CS = 0;
     T1CONbits.T1SYNC = 1;
     T1CONbits.TMR1GE = 0;
-    T1CONbits.TMR1ON = 1;   //Habilita o timer 1   
+    T1CONbits.TMR1ON = 0;   //Habilita ou desabilita o timer 1   
     T1CONbits.T1CKPS0 = 0;  //Preescaler
     T1CONbits.T1CKPS1 = 0;  //Preescaler
     
@@ -51,16 +54,38 @@ void __interrupt() deni_son(void)
         {
             tlseg = 10000;
             —-contador;
-        } 
+        }
+        
+        if( S1() && contador > 0)
+        {
+            T1CONbits.TMR1ON = 0;            //Pausa
+            while( T1CONbits.TMR1ON == 0 )
+            {
+                 if( S1() )                  //Retomada
+                 T1CONbits.TMR1ON = 1;
+
+                 if( S0() )                  //Reset
+                 {
+                      contador = contagem;
+                      T1CONbits.TMR1ON = 1;
+                 }
+            }
+        }
+        
+
         if(contador == 0)
         {
-            PORTDbits.RD0 = 1;  //Quando acaba a contagem acende uma luz
-        }
-    }   
-        
-}
+            PORTDbits.RD0 = 1;      //LED de sinalização para término de contagem
+            T1CONbits.TMR1ON = 0;   //Desliga o Timer 1
 
-int lemes(void)
-{
-    return(contador);
+            while( T1CONbits.TMR1ON == 0 )
+            {
+                 if( S0() )                 //Reset
+                 {
+                      contador = contagem;
+                      T1CONbits.TMR1ON = 1;
+                 }
+            }
+        }
+    }         
 }
