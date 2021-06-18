@@ -5,6 +5,7 @@
  * Created on 11 de Junho de 2021, 15:59
  */
 
+#include “botoes.h”
 #include "delay.h"
 #include "config.h"
 #include <xc.h>
@@ -14,12 +15,12 @@
 void main(void) 
 {
     dispLCD_init();
-    timer_init();
+    timer_init(30);
     
-    dispLCD(0,0,"Contador        ");
+    (0,0,"Contador        ");
     while(1)
     {
-        dispLCD_num(0,10, contador, 2);
+        dispLCD_num(0,10, contador, 4);
     }    
     
     return;
